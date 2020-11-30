@@ -13,11 +13,13 @@ namespace CA201124
         public short Tulelok;
         public short Eltuntek;
 
-        public Utasketegoria(string nev, short tulelok, short eltuntek)
+        public Utasketegoria(string sor)
         {
-            this.Nev = nev;
-            this.Tulelok = tulelok;
-            this.Eltuntek = eltuntek;
+            var t = sor.Split(';');
+
+            this.Nev = t[0];
+            this.Tulelok = short.Parse(t[1]);
+            this.Eltuntek = short.Parse(t[2]);
         }
     }
     class Program
@@ -28,8 +30,7 @@ namespace CA201124
             F1();
             F2();
             F3();
-            string kszo = F4();
-            F5(kszo);
+            F4();
             F6();
             F7();
             Console.ReadKey();
@@ -50,7 +51,7 @@ namespace CA201124
             Console.WriteLine("6. feladat:");
             foreach (var k in kategoriak)
             {
-                if (k.Eltuntek > k.Tulelok * 0.6) Console.WriteLine($"\t{k.Nev}");
+                if (k.Eltuntek > (k.Tulelok + k.Eltuntek) * 0.6) Console.WriteLine($"\t{k.Nev}");
             }
         }
 
@@ -71,6 +72,7 @@ namespace CA201124
                 {
                     Console.WriteLine($"\t{l.Key} {l.Value} fő");
                 }
+                F5(kszo);
             }
         }
 
@@ -108,8 +110,7 @@ namespace CA201124
             var sr = new StreamReader(@"..\..\Res\titanic.txt");
             while (!sr.EndOfStream)
             {
-                var tmp = sr.ReadLine().Split(';');
-                kategoriak.Add(new Utasketegoria(tmp[0], short.Parse(tmp[1]), short.Parse(tmp[1])));
+                kategoriak.Add(new Utasketegoria(sr.ReadLine()));
             }
             sr.Close();
         }
